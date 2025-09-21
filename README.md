@@ -115,7 +115,7 @@ Authorization: Bearer <jwt-token>
 ├─────────────────────────────────────────────────────────────┤
 │  internal/adapter/          │  internal/adapter/           │
 │  controller/                 │  presenter/                  │
-│  (HTTP Handlers)            │  (Response Formatting)       │
+│  (Controller Pattern)       │  (Response Formatting)       │
 ├─────────────────────────────────────────────────────────────┤
 │                internal/core/usecase/                       │
 │                (Business Logic)                             │
@@ -138,7 +138,7 @@ Authorization: Bearer <jwt-token>
 │   └── main.go                      # Lambda handler setup
 ├── internal/
 │   ├── adapter/                     # External interface adapters
-│   │   ├── controller/              # HTTP request handlers
+│   │   ├── controller/              # Controller Pattern
 │   │   │   ├── user_controller.go
 │   │   │   └── user_controller_test.go
 │   │   └── presenter/               # Response formatting
