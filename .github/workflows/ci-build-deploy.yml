@@ -2,7 +2,7 @@ name: ci/build-deploy
 
 on:
   workflow_run:
-    workflows: [ "ci/unit-tests" ]
+    workflows: [ "ci/test" ]
     types: [ completed ]
     branches: [ main ]
 
@@ -17,8 +17,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    outputs:
-      image-uri: ${{ steps.output.outputs.image-uri }}
 
     steps:
       - name: Checkout repository
@@ -62,7 +60,4 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Output image URI
-        id: output
-        run: echo "image-uri=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_USER_REPOSITORY }}:latest" >> $GITHUB_OUTPUT
 

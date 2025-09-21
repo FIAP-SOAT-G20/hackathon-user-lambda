@@ -1,6 +1,6 @@
 # Hackathon User Service
 
-[![CI: Unit Tests](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-unit-test.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-unit-test.yml)
+[![CI: Tests](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-test.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-test.yml)
 [![CI: Test Coverage](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-go-test-coverage.yaml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-go-test-coverage.yaml)
 [![CI: Security Scan](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-govulncheck.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-govulncheck.yml)
 [![CI: Go Lint](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-golangci-lint.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-golangci-lint.yml)
