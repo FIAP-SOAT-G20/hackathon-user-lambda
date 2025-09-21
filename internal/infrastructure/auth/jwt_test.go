@@ -109,9 +109,9 @@ func TestJWTSigner_Verify(t *testing.T) {
 						IssuedAt:  jwt.NewNumericDate(time.Now()),
 					},
 				}
-				// Use wrong signing method (RSA instead of HMAC)
-				token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-				tokenString, _ := token.SignedString([]byte("wrong-secret"))
+				// Use non-HMAC signing method (should trigger signing method validation error)
+				token := jwt.NewWithClaims(jwt.SigningMethodNone, claims)
+				tokenString, _ := token.SignedString(jwt.UnsafeAllowNoneSignatureType)
 				return tokenString
 			},
 			expectedID:  0,
