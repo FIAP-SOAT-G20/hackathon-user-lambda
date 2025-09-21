@@ -29,7 +29,7 @@ type appDeps struct {
 var app appDeps
 
 func build(ctx context.Context) (appDeps, error) {
-	cfg := config.Load()
+	cfg := config.Load(ctx)
 	log := logger.NewLogger(cfg.Environment)
 	log.Info("api: building dependencies")
 	repo, err := datasource.NewDynamoUserRepository(ctx, cfg)
