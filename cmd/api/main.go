@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -156,7 +155,6 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		return respond(200, out)
 	}
 
-	log.Printf("DEBUG: No route matched - method=%s, path=%s", method, path)
 	return respond(404, map[string]string{"error": "not found"})
 }
 
