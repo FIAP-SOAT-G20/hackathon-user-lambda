@@ -43,9 +43,9 @@ func build(ctx context.Context) (appDeps, error) {
 	return appDeps{ctrl: ctrl, pres: pres, jwt: jwtSigner}, nil
 }
 
-func respond(status int, payload any) (events.APIGatewayV2HTTPResponse, error) {
+func respond(status int, payload any) (events.APIGatewayProxyResponse, error) {
 	b, _ := json.Marshal(payload)
-	return events.APIGatewayV2HTTPResponse{
+	return events.APIGatewayProxyResponse{
 		StatusCode: status,
 		Headers: map[string]string{
 			"Content-Type":                 "application/json",
@@ -81,7 +81,7 @@ func normalizePath(p string) string {
 	return p
 }
 
-func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if app.ctrl == nil {
 		deps, err := build(ctx)
 		if err != nil {
@@ -90,15 +90,8 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		app = deps
 	}
 
-	method := strings.ToUpper(req.RequestContext.HTTP.Method)
-	path := req.RawPath
-	if path == "" {
-		path = req.RequestContext.HTTP.Path
-	}
-	path = normalizePath(path)
-
 	switch {
-	case method == "POST" && path == "/prod/users/register":
+	case req.HTTPMethod == "POST" && normalizePath(req.Path) == "/users/register":
 		var in dto.RegisterInput
 		if err := parseBody(req.Body, &in); err != nil {
 			return respond(400, map[string]string{"error": "invalid body"})
@@ -115,7 +108,7 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		_ = json.Unmarshal(b, &out)
 		return respond(201, out)
 
-	case method == "POST" && path == "/prod/users/login":
+	case req.HTTPMethod == "POST" && normalizePath(req.Path) == "/users/login":
 		var in dto.LoginInput
 		if err := parseBody(req.Body, &in); err != nil {
 			return respond(400, map[string]string{"error": "invalid body"})
@@ -132,8 +125,8 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		_ = json.Unmarshal(b, &out)
 		return respond(200, out)
 
-	case method == "GET" && path == "/prod/users/me":
-		auth := req.Headers["authorization"]
+	case req.HTTPMethod == "GET" && normalizePath(req.Path) == "/users/me":
+		auth := req.Headers["Authorization"]
 		tok := extractBearerToken(auth)
 		if tok == "" {
 			return respond(401, map[string]string{"error": "missing bearer token"})
