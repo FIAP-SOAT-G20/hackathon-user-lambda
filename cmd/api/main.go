@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -98,7 +99,7 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 	path = normalizePath(path)
 
 	switch {
-	case method == "POST" && path == "/users/register":
+	case method == "POST" && path == "/prod/users/register":
 		var in dto.RegisterInput
 		if err := parseBody(req.Body, &in); err != nil {
 			return respond(400, map[string]string{"error": "invalid body"})
@@ -115,7 +116,7 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		_ = json.Unmarshal(b, &out)
 		return respond(201, out)
 
-	case method == "POST" && path == "/users/login":
+	case method == "POST" && path == "/prod/users/login":
 		var in dto.LoginInput
 		if err := parseBody(req.Body, &in); err != nil {
 			return respond(400, map[string]string{"error": "invalid body"})
@@ -132,7 +133,7 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		_ = json.Unmarshal(b, &out)
 		return respond(200, out)
 
-	case method == "GET" && path == "/users/me":
+	case method == "GET" && path == "/prod/users/me":
 		auth := req.Headers["authorization"]
 		tok := extractBearerToken(auth)
 		if tok == "" {
@@ -155,6 +156,7 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 		return respond(200, out)
 	}
 
+	log.Printf("DEBUG: No route matched - method=%s, path=%s", method, path)
 	return respond(404, map[string]string{"error": "not found"})
 }
 
