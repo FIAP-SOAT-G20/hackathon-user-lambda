@@ -11,6 +11,8 @@ import (
 	"github.com/FIAP-SOAT-G20/hackathon-user-lambda/internal/core/usecase"
 )
 
+const testHashedPassword = "$2a$12$5CEGdJIUSFrHCyrSOPVEE.mdHjVucN38e2xRzCb8zM1XAB7ZfqdTS" // bcrypt hash for "password123"
+
 func (s *UserUsecaseSuiteTest) TestUserUseCase_Register() {
 	tests := []struct {
 		name        string
@@ -164,12 +166,11 @@ func (s *UserUsecaseSuiteTest) TestUserUseCase_Login() {
 			},
 			setupMocks: func() {
 				// Mock user with hashed password for "password123"
-				hashedPassword := "$2a$12$5CEGdJIUSFrHCyrSOPVEE.mdHjVucN38e2xRzCb8zM1XAB7ZfqdTS" // bcrypt hash for "password123"
 				user := &domain.User{
 					UserID:   1,
 					Name:     "John Doe",
 					Email:    "john@example.com",
-					Password: hashedPassword,
+					Password: testHashedPassword,
 				}
 				s.mockRepo.EXPECT().
 					GetByEmail(s.ctx, "john@example.com").
@@ -238,12 +239,11 @@ func (s *UserUsecaseSuiteTest) TestUserUseCase_Login() {
 				Password: "wrongpassword",
 			},
 			setupMocks: func() {
-				hashedPassword := "$2a$12$5CEGdJIUSFrHCyrSOPVEE.mdHjVucN38e2xRzCb8zM1XAB7ZfqdTS" // bcrypt hash for "password123"
 				user := &domain.User{
 					UserID:   1,
 					Name:     "John Doe",
 					Email:    "john@example.com",
-					Password: hashedPassword,
+					Password: testHashedPassword,
 				}
 				s.mockRepo.EXPECT().
 					GetByEmail(s.ctx, "john@example.com").
@@ -262,12 +262,11 @@ func (s *UserUsecaseSuiteTest) TestUserUseCase_Login() {
 				Password: "password123",
 			},
 			setupMocks: func() {
-				hashedPassword := "$2a$12$5CEGdJIUSFrHCyrSOPVEE.mdHjVucN38e2xRzCb8zM1XAB7ZfqdTS" // bcrypt hash for "password123"
 				user := &domain.User{
 					UserID:   1,
 					Name:     "John Doe",
 					Email:    "john@example.com",
-					Password: hashedPassword,
+					Password: testHashedPassword,
 				}
 				s.mockRepo.EXPECT().
 					GetByEmail(s.ctx, "john@example.com").
