@@ -16,23 +16,101 @@ DynamoDB, written in Go, following clean architecture principles with hexagonal 
 
 ### POST /users/register
 Register a new user
-- **Request**: `{ "name": string, "email": string, "password": string }`
-- **Success (201)**: `{ "userId": number, "name": string, "email": string }`
-- **Error (409)**: `{ "error": "email already registered" }`
-- **Error (400)**: `{ "error": "invalid input" }`
+
+**Request:**
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Success (201):**
+
+```json
+{
+  "user_id": 1,
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+**Error (409):**
+
+```json
+{
+  "error": "email already registered"
+}
+```
+
+**Error (400):**
+
+```json
+{
+  "error": "invalid input"
+}
+```
 
 ### POST /users/login
 Authenticate user and receive JWT token
-- **Request**: `{ "email": string, "password": string }`
-- **Success (200)**: `{ "token": string }`
-- **Error (401)**: `{ "error": "invalid credentials" }`
+
+**Request:**
+
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Success (200):**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Error (401):**
+
+```json
+{
+  "error": "invalid credentials"
+}
+```
 
 ### GET /users/me
 Get current user profile (requires authentication)
-- **Header**: `Authorization: Bearer <jwt-token>`
-- **Success (200)**: `{ "userId": number, "name": string, "email": string }`
-- **Error (401)**: `{ "error": "missing/invalid bearer token" }`
-- **Error (404)**: `{ "error": "user not found" }`
+
+**Header:** `Authorization: Bearer <jwt-token>`
+
+**Success (200):**
+
+```json
+{
+  "user_id": 1,
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+**Error (401):**
+
+```json
+{
+  "error": "missing bearer token"
+}
+```
+
+**Error (404):**
+
+```json
+{
+  "error": "user not found"
+}
+```
 
 ## Requirements
 
@@ -160,25 +238,3 @@ make clean
    **IDs Table**:
    - Primary Key: `sequence` (String)
    - Used for generating sequential user IDs
-
-## Architecture
-
-This project follows Clean Architecture principles:
-
-- **Domain Layer**: Core business entities and rules
-- **Use Case Layer**: Application-specific business logic
-- **Interface Adapters**: Controllers, presenters, and gateways
-- **Infrastructure**: External concerns (database, HTTP, logging)
-
-The hexagonal architecture ensures:
-- Business logic independence from external frameworks
-- Easy testing with comprehensive mocks
-- Flexibility to change external dependencies
-
-## Security Considerations
-
-- Never commit secrets to version control
-- Use AWS Secrets Manager or SSM Parameter Store for JWT_SECRET in production
-- Passwords are hashed using bcrypt with salt
-- JWT tokens have configurable expiration
-- Input validation on all endpoints

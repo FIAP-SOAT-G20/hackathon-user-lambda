@@ -14,13 +14,13 @@ func (p *JSONPresenter) Present(v any) ([]byte, error) {
 	switch t := v.(type) {
 	case dto.RegisterOutput:
 		return json.Marshal(struct {
-			UserID int64  `json:"userId"`
+			UserID int64  `json:"user_id"`
 			Name   string `json:"name"`
 			Email  string `json:"email"`
 		}{UserID: t.UserID, Name: t.Name, Email: t.Email})
 	case *dto.RegisterOutput:
 		return json.Marshal(struct {
-			UserID int64  `json:"userId"`
+			UserID int64  `json:"user_id"`
 			Name   string `json:"name"`
 			Email  string `json:"email"`
 		}{UserID: t.UserID, Name: t.Name, Email: t.Email})
@@ -34,13 +34,13 @@ func (p *JSONPresenter) Present(v any) ([]byte, error) {
 		}{Token: t.Token})
 	case dto.GetMeOutput:
 		return json.Marshal(struct {
-			UserID int64  `json:"userId"`
+			UserID int64  `json:"user_id"`
 			Name   string `json:"name"`
 			Email  string `json:"email"`
 		}{UserID: t.UserID, Name: t.Name, Email: t.Email})
 	case *dto.GetMeOutput:
 		return json.Marshal(struct {
-			UserID int64  `json:"userId"`
+			UserID int64  `json:"user_id"`
 			Name   string `json:"name"`
 			Email  string `json:"email"`
 		}{UserID: t.UserID, Name: t.Name, Email: t.Email})
