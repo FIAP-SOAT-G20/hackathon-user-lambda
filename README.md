@@ -1,19 +1,19 @@
 # Hackathon User Service
 
 [![CI: Unit Tests](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-unit-test.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-unit-test.yml)
-[![CI: Integration Tests](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-integration-test.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-integration-test.yml)
+[![CI: Test Coverage](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-go-test-coverage.yaml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-go-test-coverage.yaml)
 [![CI: Security Scan](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-govulncheck.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-govulncheck.yml)
 [![CI: Go Lint](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-golangci-lint.yml/badge.svg)](https://github.com/FIAP-SOAT-G20/hackathon-user-lambda/actions/workflows/ci-golangci-lint.yml)
 
 A modern, production-ready microservice for user authentication and management built with Go, AWS Lambda, and DynamoDB.
-This service implements clean architecture principles with hexagonal architecture pattern, providing JWT-based
-authentication with comprehensive security features.
+This service implements Clean Architecture principles, providing JWT-based authentication with comprehensive security
+features.
 
 ## 🚀 Features
 
 - **JWT Authentication**: Secure token-based authentication with configurable expiration
 - **User Management**: Complete user lifecycle (register, login, profile retrieval)
-- **Clean Architecture**: Hexagonal architecture with separated concerns and dependency injection
+- **Clean Architecture**: Layered architecture with separated concerns and dependency injection
 - **Production Ready**: Comprehensive test coverage, CI/CD pipelines, and Docker support
 - **AWS Native**: Built for AWS Lambda with DynamoDB integration
 - **Security First**: Password hashing, input validation, and secure JWT handling
@@ -391,7 +391,7 @@ Create required DynamoDB tables:
 The project includes comprehensive GitHub Actions workflows:
 
 - **Unit Tests**: Automated testing with Go 1.25
-- **Integration Tests**: End-to-end testing scenarios
+- **Test Coverage**: Comprehensive test coverage reporting
 - **Security Scanning**: Vulnerability detection with govulncheck
 - **Linting**: Code quality checks with golangci-lint
 - **Build & Deploy**: Automated Docker builds and ECR pushes
