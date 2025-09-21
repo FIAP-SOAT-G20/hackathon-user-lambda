@@ -18,7 +18,7 @@ exclude:
     - ^internal/core/port/mocks/.*
     - ^internal/infrastructure/datasource/.*
     - ^internal/infrastructure/logger/.*
-    - ^internal/infrastructure/paramstore/**
+    - ^internal/infrastructure/paramstore/.*
     - ^internal/core/domain/.*
     - ^.*middleware.*
     - ^.*config.*
