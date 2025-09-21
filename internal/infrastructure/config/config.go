@@ -34,12 +34,17 @@ func Load() *Config {
 		exp = 24 * time.Hour
 	}
 
+	jwtSecret, ok := os.LookupEnv("JWT_SECRET")
+	if !ok || jwtSecret == "" {
+		log.Fatal("JWT_SECRET environment variable must be set and non-empty")
+	}
+
 	return &Config{
 		Environment:    getEnv("ENVIRONMENT", "development"),
 		AWSRegion:      getEnv("AWS_REGION", "us-east-1"),
 		UsersTableName: getEnv("USERS_TABLE_NAME", "hackathon_users"),
 		IdsTableName:   getEnv("IDS_TABLE_NAME", "hackathon_ids"),
-		JWTSecret:      getEnv("JWT_SECRET", "CHANGE_ME"),
+		JWTSecret:      jwtSecret,
 		JWTExpiration:  exp,
 	}
 }
