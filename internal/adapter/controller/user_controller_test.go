@@ -125,3 +125,41 @@ func TestUserController_GetMe_Error(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, b)
 }
+
+func TestUserController_GetUserByID_Success(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockUC := mockport.NewMockUserUseCase(ctrl)
+	mockPresenter := mockport.NewMockPresenter(ctrl)
+	c := controller.NewUserController(mockUC)
+
+	ctx := context.Background()
+	userID := int64(5)
+	out := &dto.GetUserByIDOutput{UserID: userID, Name: "Alice", Email: "a@a.com"}
+
+	mockUC.EXPECT().GetUserByID(ctx, userID).Return(out, nil)
+	mockPresenter.EXPECT().Present(gomock.AssignableToTypeOf(&dto.GetUserByIDOutput{})).Return([]byte("{}"), nil)
+
+	b, err := c.GetUserByID(ctx, mockPresenter, userID)
+	assert.NoError(t, err)
+	assert.NotNil(t, b)
+}
+
+func TestUserController_GetUserByID_Error(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockUC := mockport.NewMockUserUseCase(ctrl)
+	mockPresenter := mockport.NewMockPresenter(ctrl)
+	c := controller.NewUserController(mockUC)
+
+	ctx := context.Background()
+	userID := int64(5)
+
+	mockUC.EXPECT().GetUserByID(ctx, userID).Return(nil, assert.AnError)
+
+	b, err := c.GetUserByID(ctx, mockPresenter, userID)
+	assert.Error(t, err)
+	assert.Nil(t, b)
+}

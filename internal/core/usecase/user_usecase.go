@@ -88,3 +88,14 @@ func (u *userUseCase) GetMe(ctx context.Context, userID int64) (*dto.GetMeOutput
 	}
 	return &dto.GetMeOutput{UserID: user.UserID, Name: user.Name, Email: user.Email}, nil
 }
+
+func (u *userUseCase) GetUserByID(ctx context.Context, userID int64) (*dto.GetUserByIDOutput, error) {
+	if userID == 0 {
+		return nil, ErrInvalidUserID
+	}
+	user, err := u.repo.GetByID(ctx, userID)
+	if err != nil || user == nil {
+		return nil, ErrUserNotFound
+	}
+	return &dto.GetUserByIDOutput{UserID: user.UserID, Name: user.Name, Email: user.Email}, nil
+}

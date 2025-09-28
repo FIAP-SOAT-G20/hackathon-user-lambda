@@ -29,6 +29,7 @@ features.
 | `POST` | `/prod/users/register` | Register a new user                 | ❌             |
 | `POST` | `/prod/users/login`    | Authenticate user and get JWT token | ❌             |
 | `GET`  | `/prod/users/me`       | Get current user profile            | ✅             |
+| `GET`  | `/prod/users/{id}`     | Get user profile by ID              | ❌             |
 
 ### POST /prod/users/register
 
@@ -103,6 +104,28 @@ Authorization: Bearer <jwt-token>
 **Error Responses:**
 
 - `401 Unauthorized`: Missing or invalid token
+- `404 Not Found`: User not found
+
+### GET /prod/users/{id}
+
+Retrieve user profile information by user ID. This is a public endpoint that doesn't require authentication.
+
+**Parameters:**
+
+- `id` (path parameter): User ID (integer)
+
+**Response (200 OK):**
+```json
+{
+  "user_id": 1,
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request`: Invalid user ID format
 - `404 Not Found`: User not found
 
 ## 🏗️ Architecture

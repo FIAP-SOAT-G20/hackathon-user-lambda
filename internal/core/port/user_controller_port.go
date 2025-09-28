@@ -10,4 +10,5 @@ type UserController interface {
 	Register(ctx context.Context, p Presenter, in dto.RegisterInput) ([]byte, error)
 	Login(ctx context.Context, p Presenter, in dto.LoginInput) ([]byte, error)
 	GetMe(ctx context.Context, p Presenter, userID int64) ([]byte, error)
+	GetUserByID(ctx context.Context, p Presenter, userID int64) ([]byte, error)
 }

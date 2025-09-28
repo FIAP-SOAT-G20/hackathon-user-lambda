@@ -57,6 +57,21 @@ func (mr *MockUserControllerMockRecorder) GetMe(ctx, p, userID any) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMe", reflect.TypeOf((*MockUserController)(nil).GetMe), ctx, p, userID)
 }
 
+// GetUserByID mocks base method.
+func (m *MockUserController) GetUserByID(ctx context.Context, p port.Presenter, userID int64) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByID", ctx, p, userID)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByID indicates an expected call of GetUserByID.
+func (mr *MockUserControllerMockRecorder) GetUserByID(ctx, p, userID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockUserController)(nil).GetUserByID), ctx, p, userID)
+}
+
 // Login mocks base method.
 func (m *MockUserController) Login(ctx context.Context, p port.Presenter, in dto.LoginInput) ([]byte, error) {
 	m.ctrl.T.Helper()
