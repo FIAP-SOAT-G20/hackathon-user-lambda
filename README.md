@@ -29,7 +29,7 @@ features.
 | `POST` | `/prod/users/register` | Register a new user                 | ❌             |
 | `POST` | `/prod/users/login`    | Authenticate user and get JWT token | ❌             |
 | `GET`  | `/prod/users/me`       | Get current user profile            | ✅             |
-| `GET`  | `/prod/users/{id}`     | Get user profile by ID              | ❌             |
+| `POST` | `/prod/users/{id}`     | Get user profile by ID              | ❌             |
 
 ### POST /prod/users/register
 
@@ -106,7 +106,7 @@ Authorization: Bearer <jwt-token>
 - `401 Unauthorized`: Missing or invalid token
 - `404 Not Found`: User not found
 
-### GET /prod/users/{id}
+### POST /prod/users/{id}
 
 Retrieve user profile information by user ID. This is a public endpoint that doesn't require authentication.
 
