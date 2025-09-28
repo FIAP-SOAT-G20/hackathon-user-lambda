@@ -375,3 +375,82 @@ func (s *UserUsecaseSuiteTest) TestUserUseCase_GetMe() {
 		})
 	}
 }
+
+func (s *UserUsecaseSuiteTest) TestUserUseCase_GetUserByID() {
+	tests := []struct {
+		name        string
+		userID      int64
+		setupMocks  func()
+		checkResult func(*testing.T, *dto.GetUserByIDOutput, error)
+	}{
+		{
+			name:   "should get user by ID successfully",
+			userID: 1,
+			setupMocks: func() {
+				s.mockRepo.EXPECT().
+					GetByID(s.ctx, int64(1)).
+					Return(s.mockUsers[0], nil)
+			},
+			checkResult: func(t *testing.T, output *dto.GetUserByIDOutput, err error) {
+				assert.NoError(t, err)
+				assert.NotNil(t, output)
+				assert.Equal(t, int64(1), output.UserID)
+				assert.Equal(t, "John Doe", output.Name)
+				assert.Equal(t, "john@example.com", output.Email)
+			},
+		},
+		{
+			name:   "should return error when userID is invalid",
+			userID: 0,
+			setupMocks: func() {
+				// No mock calls expected
+			},
+			checkResult: func(t *testing.T, output *dto.GetUserByIDOutput, err error) {
+				assert.Error(t, err)
+				assert.Nil(t, output)
+				assert.Equal(t, usecase.ErrInvalidUserID, err)
+			},
+		},
+		{
+			name:   "should return error when user not found",
+			userID: 999,
+			setupMocks: func() {
+				s.mockRepo.EXPECT().
+					GetByID(s.ctx, int64(999)).
+					Return(nil, nil)
+			},
+			checkResult: func(t *testing.T, output *dto.GetUserByIDOutput, err error) {
+				assert.Error(t, err)
+				assert.Nil(t, output)
+				assert.Equal(t, usecase.ErrUserNotFound, err)
+			},
+		},
+		{
+			name:   "should return error when repository fails",
+			userID: 1,
+			setupMocks: func() {
+				s.mockRepo.EXPECT().
+					GetByID(s.ctx, int64(1)).
+					Return(nil, assert.AnError)
+			},
+			checkResult: func(t *testing.T, output *dto.GetUserByIDOutput, err error) {
+				assert.Error(t, err)
+				assert.Nil(t, output)
+				assert.Equal(t, usecase.ErrUserNotFound, err)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			// Arrange
+			tt.setupMocks()
+
+			// Act
+			output, err := s.useCase.GetUserByID(s.ctx, tt.userID)
+
+			// Assert
+			tt.checkResult(t, output, err)
+		})
+	}
+}

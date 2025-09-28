@@ -26,3 +26,9 @@ type GetMeOutput struct {
 	Name   string
 	Email  string
 }
+
+type GetUserByIDOutput struct {
+	UserID int64
+	Name   string
+	Email  string
+}

@@ -38,3 +38,11 @@ func (c *UserController) GetMe(ctx context.Context, p port.Presenter, userID int
 	}
 	return p.Present(out)
 }
+
+func (c *UserController) GetUserByID(ctx context.Context, p port.Presenter, userID int64) ([]byte, error) {
+	out, err := c.usecase.GetUserByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	return p.Present(out)
+}

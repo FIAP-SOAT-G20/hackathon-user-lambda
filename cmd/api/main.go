@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strconv"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -136,6 +137,31 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			return respond(401, map[string]string{"error": "invalid token"})
 		}
 		b, err := app.ctrl.GetMe(ctx, app.pres, userID)
+		if err != nil {
+			status := 400
+			if errors.Is(err, ucase.ErrUserNotFound) {
+				status = 404
+			}
+			return respond(status, map[string]string{"error": err.Error()})
+		}
+		var out any
+		_ = json.Unmarshal(b, &out)
+		return respond(200, out)
+
+	case req.HTTPMethod == "GET" && strings.HasPrefix(normalizePath(req.Path), "/users/"):
+		pathParts := strings.Split(strings.Trim(req.Path, "/"), "/")
+		if len(pathParts) != 2 {
+			return respond(404, map[string]string{"error": "not found"})
+		}
+		userIDStr := pathParts[1]
+		if userIDStr == "me" {
+			return respond(404, map[string]string{"error": "not found"})
+		}
+		userID, err := strconv.ParseInt(userIDStr, 10, 64)
+		if err != nil {
+			return respond(400, map[string]string{"error": "invalid user id"})
+		}
+		b, err := app.ctrl.GetUserByID(ctx, app.pres, userID)
 		if err != nil {
 			status := 400
 			if errors.Is(err, ucase.ErrUserNotFound) {

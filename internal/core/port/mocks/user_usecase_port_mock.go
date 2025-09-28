@@ -56,6 +56,21 @@ func (mr *MockUserUseCaseMockRecorder) GetMe(ctx, userID any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMe", reflect.TypeOf((*MockUserUseCase)(nil).GetMe), ctx, userID)
 }
 
+// GetUserByID mocks base method.
+func (m *MockUserUseCase) GetUserByID(ctx context.Context, userID int64) (*dto.GetUserByIDOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByID", ctx, userID)
+	ret0, _ := ret[0].(*dto.GetUserByIDOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByID indicates an expected call of GetUserByID.
+func (mr *MockUserUseCaseMockRecorder) GetUserByID(ctx, userID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockUserUseCase)(nil).GetUserByID), ctx, userID)
+}
+
 // Login mocks base method.
 func (m *MockUserUseCase) Login(ctx context.Context, in dto.LoginInput) (*dto.LoginOutput, error) {
 	m.ctrl.T.Helper()
