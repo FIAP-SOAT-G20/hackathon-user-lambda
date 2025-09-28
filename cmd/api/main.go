@@ -148,7 +148,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		_ = json.Unmarshal(b, &out)
 		return respond(200, out)
 
-	case req.HTTPMethod == "GET" && strings.HasPrefix(normalizePath(req.Path), "/users/"):
+	case req.HTTPMethod == "POST" && strings.HasPrefix(normalizePath(req.Path), "/users/"):
 		pathParts := strings.Split(strings.Trim(req.Path, "/"), "/")
 		if len(pathParts) != 2 {
 			return respond(404, map[string]string{"error": "not found"})
