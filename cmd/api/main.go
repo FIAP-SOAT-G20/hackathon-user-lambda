@@ -134,7 +134,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		}
 		userID, err := app.jwt.Verify(tok)
 		if err != nil {
-			return respond(401, map[string]string{"error": "invalid token", "path": req.Path})
+			return respond(401, map[string]string{"error": "invalid token", "details": err.Error(), "path": req.Path})
 		}
 		b, err := app.ctrl.GetMe(ctx, app.pres, userID)
 		if err != nil {
