@@ -27,6 +27,12 @@ type appDeps struct {
 	jwt  port.JWTSigner
 }
 
+type UserResponse struct {
+	ID    int64  `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+}
+
 var app appDeps
 
 func build(ctx context.Context) (appDeps, error) {
@@ -169,8 +175,10 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			}
 			return respond(status, map[string]string{"error": err.Error(), "path": req.Path})
 		}
-		var out any
-		_ = json.Unmarshal(b, &out)
+		var out UserResponse
+		if err := json.Unmarshal(b, &out); err != nil {
+			return respond(500, map[string]string{"error": "failed to parse response", "details": err.Error(), "path": req.Path})
+		}
 		return respond(200, out)
 	}
 
