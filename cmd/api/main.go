@@ -95,7 +95,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	case req.HTTPMethod == "POST" && normalizePath(req.Path) == "/users/register":
 		var in dto.RegisterInput
 		if err := parseBody(req.Body, &in); err != nil {
-			return respond(400, map[string]string{"error": "invalid body"})
+			return respond(400, map[string]string{"error": "invalid body", "details": err.Error(), "path": req.Path})
 		}
 		b, err := app.ctrl.Register(ctx, app.pres, in)
 		if err != nil {
@@ -103,7 +103,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			if errors.Is(err, ucase.ErrEmailAlreadyExists) {
 				status = 409
 			}
-			return respond(status, map[string]string{"error": err.Error()})
+			return respond(status, map[string]string{"error": err.Error(), "path": req.Path})
 		}
 		var out any
 		_ = json.Unmarshal(b, &out)
@@ -112,7 +112,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	case req.HTTPMethod == "POST" && normalizePath(req.Path) == "/users/login":
 		var in dto.LoginInput
 		if err := parseBody(req.Body, &in); err != nil {
-			return respond(400, map[string]string{"error": "invalid body"})
+			return respond(400, map[string]string{"error": "invalid body", "details": err.Error(), "path": req.Path})
 		}
 		b, err := app.ctrl.Login(ctx, app.pres, in)
 		if err != nil {
@@ -120,7 +120,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			if errors.Is(err, ucase.ErrInvalidCredentials) || errors.Is(err, ucase.ErrInvalidInput) {
 				status = 401
 			}
-			return respond(status, map[string]string{"error": err.Error()})
+			return respond(status, map[string]string{"error": err.Error(), "path": req.Path})
 		}
 		var out any
 		_ = json.Unmarshal(b, &out)
@@ -130,11 +130,11 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		auth := req.Headers["Authorization"]
 		tok := extractBearerToken(auth)
 		if tok == "" {
-			return respond(401, map[string]string{"error": "missing bearer token"})
+			return respond(401, map[string]string{"error": "missing bearer token", "details": "Authorization header must be in format 'Bearer <token>'", "path": req.Path})
 		}
 		userID, err := app.jwt.Verify(tok)
 		if err != nil {
-			return respond(401, map[string]string{"error": "invalid token"})
+			return respond(401, map[string]string{"error": "invalid token", "path": req.Path})
 		}
 		b, err := app.ctrl.GetMe(ctx, app.pres, userID)
 		if err != nil {
@@ -142,7 +142,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			if errors.Is(err, ucase.ErrUserNotFound) {
 				status = 404
 			}
-			return respond(status, map[string]string{"error": err.Error()})
+			return respond(status, map[string]string{"error": err.Error(), "path": req.Path})
 		}
 		var out any
 		_ = json.Unmarshal(b, &out)
@@ -151,15 +151,15 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	case req.HTTPMethod == "POST" && strings.HasPrefix(normalizePath(req.Path), "/users/"):
 		pathParts := strings.Split(strings.Trim(req.Path, "/"), "/")
 		if len(pathParts) != 2 {
-			return respond(404, map[string]string{"error": "not found"})
+			return respond(404, map[string]string{"error": "not found", "details": "invalid path on user profile retrieval", "path": req.Path})
 		}
 		userIDStr := pathParts[1]
 		if userIDStr == "me" {
-			return respond(404, map[string]string{"error": "not found"})
+			return respond(404, map[string]string{"error": "not found", "details": "user ID 'me' is not valid", "path": req.Path})
 		}
 		userID, err := strconv.ParseInt(userIDStr, 10, 64)
 		if err != nil {
-			return respond(400, map[string]string{"error": "invalid user id"})
+			return respond(400, map[string]string{"error": "invalid user id", "details": err.Error(), "path": req.Path})
 		}
 		b, err := app.ctrl.GetUserByID(ctx, app.pres, userID)
 		if err != nil {
@@ -167,14 +167,14 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			if errors.Is(err, ucase.ErrUserNotFound) {
 				status = 404
 			}
-			return respond(status, map[string]string{"error": err.Error()})
+			return respond(status, map[string]string{"error": err.Error(), "path": req.Path})
 		}
 		var out any
 		_ = json.Unmarshal(b, &out)
 		return respond(200, out)
 	}
 
-	return respond(404, map[string]string{"error": "not found"})
+	return respond(404, map[string]string{"error": "not found", "details": "unknown endpoint", "path": req.Path})
 }
 
 func main() {
