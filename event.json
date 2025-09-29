@@ -1,0 +1,34 @@
+{
+    "resource": "/users/{proxy+}",
+    "path": "/users/7",
+    "httpMethod": "POST",
+    "headers": {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+    },
+    "pathParameters": {
+      "proxy": "7"
+    },
+    "requestContext": {
+      "accountId": "xxxxxxxxxx",
+      "resourceId": "xxxxxxxxxx",
+      "stage": "test",
+      "requestId": "xxxxxxxxxx",
+      "identity": {
+        "cognitoIdentityPoolId": null,
+        "accountId": null,
+        "cognitoIdentityId": null,
+        "caller": null,
+        "apiKey": null,
+        "sourceIp": "192.0.2.1",
+        "cognitoAuthenticationType": null,
+        "cognitoAuthenticationProvider": null,
+        "userArn": null,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36",
+        "user": null
+      },
+      "resourcePath": "/users/{proxy+}",
+      "httpMethod": "POST",
+      "apiId": "xxxxxxxxxx"
+    }
+  }
+  

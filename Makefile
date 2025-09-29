@@ -34,3 +34,24 @@ mock:
 
 clean:
 	rm -rf $(BIN_DIR)
+
+
+.PHONY: install-deps
+install-deps: ## 📦 Install dependencies
+	@echo "🟢 Installing dependencies..."
+	go mod download
+	@go install github.com/blmayer/awslambdarpc@latest
+	@echo
+
+.PHONY: start-lambda
+start-lambda:  build  ## ▶  Start the lambda application locally to prepare to receive requests
+	@echo "🟢 Starting lambda ..."
+	_LAMBDA_SERVER_PORT=3300 AWS_LAMBDA_RUNTIME_API=http://localhost:3300 go run ./cmd/api/main.go
+	@echo
+
+.PHONY: trigger-lambda
+trigger-lambda: ## ⚡  Trigger lambda with the input file stored in variable ./event.json
+	@echo "🟢 Triggering lambda with event: ./event.json"
+	@PATH="$(shell go env GOPATH)/bin:$$PATH" \
+		awslambdarpc -a localhost:3300 -e ./event.json
+	@echo
