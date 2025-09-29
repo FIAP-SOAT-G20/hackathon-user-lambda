@@ -155,7 +155,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		}
 		userIDStr := pathParts[1]
 		if userIDStr == "me" {
-			return respond(404, map[string]string{"error": "not found", "details": "user ID 'me' is not valid", "path": req.Path})
+			return respond(404, map[string]string{"error": "not found", "details": "user ID 'me' is not supported for this POST endpoint; use GET /users/me instead", "path": req.Path})
 		}
 		userID, err := strconv.ParseInt(userIDStr, 10, 64)
 		if err != nil {
