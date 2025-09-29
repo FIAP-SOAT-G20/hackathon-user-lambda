@@ -176,7 +176,9 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 			return respond(status, map[string]string{"error": err.Error(), "path": req.Path})
 		}
 		var out UserResponse
-		_ = json.Unmarshal(b, &out)
+		if err := json.Unmarshal(b, &out); err != nil {
+			return respond(500, map[string]string{"error": "failed to parse response", "details": err.Error(), "path": req.Path})
+		}
 		return respond(200, out)
 	}
 
