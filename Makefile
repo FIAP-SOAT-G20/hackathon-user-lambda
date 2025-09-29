@@ -32,6 +32,5 @@ mock:
 		go run go.uber.org/mock/mockgen@latest -source=$$file -destination=internal/core/port/mocks/`basename $$file .go`_mock.go; \
 	done
 
-
 clean:
 	rm -rf $(BIN_DIR)
